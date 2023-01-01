@@ -9,6 +9,7 @@ import { CinemaHallModule } from './cinema_hall/cinema_hall.module';
 import { SeatModule } from './seat/seat.module';
 import { TicketModule } from './ticket/ticket.module';
 import { FilmModule } from './film/film.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FilmModule } from './film/film.module';
     SeatModule,
     TicketModule,
     FilmModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

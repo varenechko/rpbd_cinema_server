@@ -7,7 +7,7 @@ export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
   @Post()
-  create(@Body() createTicketDto: CreateTicketDto) {
+  create(@Body() createTicketDto: CreateTicketDto[]) {
     return this.ticketService.create(createTicketDto);
   }
 
@@ -19,6 +19,16 @@ export class TicketController {
   @Get('byProfile/:id')
   findAllbyProfile(@Param('id') id: string) {
     return this.ticketService.findByProfile(+id);
+  }
+
+  @Get('top-films')
+  getTopFilms() {
+    return this.ticketService.getTopFilms();
+  }
+
+  @Get('bySession/:id')
+  findBySession(@Param('id') id: string) {
+    return this.ticketService.findBySession(+id);
   }
 
   @Get(':id')

@@ -1,5 +1,6 @@
 import { Film } from 'src/film/entities/film.entity';
 import { Seat } from 'src/seat/entities/seat.entity';
+import { Session } from 'src/session/entities/session.entity';
 import { Users } from 'src/users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
@@ -7,13 +8,6 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 export class Ticket {
   @PrimaryColumn({ type: 'numeric' })
   ticket_id: number;
-
-  @Column({ type: 'numeric' })
-  film_id: number;
-
-  @ManyToOne(() => Film, (film) => film.film_id)
-  @JoinColumn({ name: 'film_id' })
-  film: Film;
 
   @Column({ type: 'numeric' })
   profile_id: number;
@@ -25,16 +19,14 @@ export class Ticket {
   @Column({ type: 'numeric' })
   seat_id: number;
 
-  // @OneToMany(() => Seat, (seat) => seat.seat_id)
-  // seat: Seat;
-
   @ManyToOne(() => Seat, (seat) => seat.seat_id)
   @JoinColumn({ name: 'seat_id' })
   seat: Seat;
 
-  @Column({ type: 'timestamp without time zone' })
-  date: Date;
-
   @Column({ type: 'numeric' })
-  price: number;
+  session_id: number;
+
+  @ManyToOne(() => Session, (session) => session.session_id)
+  @JoinColumn({ name: 'session_id' })
+  session: Session;
 }

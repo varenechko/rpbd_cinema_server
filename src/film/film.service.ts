@@ -38,7 +38,12 @@ export class FilmService {
   }
 
   async findByName(name: string) {
-    return await this.filmRepository.findBy({ title: ILike(`%${name}%`) });
+    if (name === '*') {
+      return await this.filmRepository.find();
+    }
+    return await this.filmRepository.findBy({
+      title: ILike(`%${name || ''}%`),
+    });
   }
 
   async update(id: number, updateFilmDto: UpdateFilmDto) {

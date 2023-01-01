@@ -11,28 +11,53 @@ export class TicketService {
     private ticketRepository: Repository<Ticket>,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto) {
-    try {
-      const id = (await this.ticketRepository.count()) + 1;
-      const hall = this.ticketRepository.create({
+  async create(createTicketDtoArray: CreateTicketDto[]) {
+    console.log('--------------------', createTicketDtoArray);
+    createTicketDtoArray.forEach(async (createTicketDto, index) => {
+      // try {
+      const id = (await this.ticketRepository.count()) + 1 + index;
+      console.log('==========================', id);
+
+      const ticket = this.ticketRepository.create({
         ticket_id: id,
         ...createTicketDto,
       });
-      return await this.ticketRepository.save(hall);
-    } catch (error) {
-      throw new HttpException('could not creare hall', 460);
-    }
+      return await this.ticketRepository.save(ticket);
+      // } catch (error) {
+      //   throw new HttpException('could not creare ticket', 460);
+      // }
+    });
+  }
+
+  async getTopFilms() {
+    return await this.ticketRepository.query(`
+    select film.title, count(ti.ticket_id) as "count" from ticket ti 
+    left join "session" s ON s.session_id = ti.session_id
+    left join film ON film.film_id = s.film_id
+    GROUP by film.title
+    order by "count" DESC
+    `);
   }
 
   async findAll() {
-    return await this.ticketRepository.find();
+    return await this.ticketRepository.find({
+      relations: {
+        session: true,
+        user: true,
+        seat: {
+          hall: {
+            cinema: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
     return await this.ticketRepository.find({
       where: { ticket_id: id },
       relations: {
-        film: true,
+        session: true,
         user: true,
         seat: {
           hall: {
@@ -47,7 +72,17 @@ export class TicketService {
     return await this.ticketRepository.find({
       where: { profile_id: id },
       relations: {
-        film: true,
+        session: true,
+        seat: true,
+      },
+    });
+  }
+
+  async findBySession(id: number) {
+    return await this.ticketRepository.find({
+      where: { session_id: id },
+      relations: {
+        session: true,
         seat: true,
       },
     });

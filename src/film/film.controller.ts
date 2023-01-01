@@ -22,13 +22,18 @@ export class FilmController {
   }
 
   @Get()
-  findAll(@Body() body: GetAllDto) {
-    return this.filmService.findAll(body.order);
+  findAll() {
+    return this.filmService.findAll();
   }
 
-  @Get(':search')
-  findByName(@Param('search') search: string) {
-    return this.filmService.findByName(search);
+  @Get('search/:text')
+  findByName(@Param('text') text: string) {
+    return this.filmService.findByName(text);
+  }
+
+  @Get('sort/:value')
+  findSorted(@Param('value') value: string) {
+    return this.filmService.findAll(value);
   }
 
   @Get(':id')
